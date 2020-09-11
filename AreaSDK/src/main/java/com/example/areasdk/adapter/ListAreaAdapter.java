@@ -29,6 +29,7 @@ import com.example.areasdk.data.model.response.default_.AreaResponse;
 import com.example.areasdk.databinding.ItemLayoutBinding;
 import com.example.areasdk.util.ReqApiUtils;
 import com.example.areasdk.view.AreaActivity;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -69,11 +70,15 @@ public class ListAreaAdapter extends RecyclerView.Adapter<ListAreaAdapter.MyHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("item_click", listArea.get(position).getFullName() + ", " + listArea.get(position).getAreaType());
                 if (listArea.get(position).getAreaType().equals(Constants.AreaType.CITY)) {
                     setUpData(Constants.AreaType.DISTRICT, listArea.get(position).getAreaCode());
                 } else if (listArea.get(position).getAreaType().equals(Constants.AreaType.DISTRICT)) {
                     setUpData(Constants.AreaType.VILLAGE, listArea.get(position).getAreaCode());
+                } else {
+                    Log.e("item_click", listArea.get(position).getFullName());
+                    Intent intent = new Intent(context, AreaActivity.class);
+                    intent.putExtra("area", listArea.get(position).getFullName());
+                    context.startActivity(intent);
                 }
             }
         });

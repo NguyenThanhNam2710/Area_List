@@ -5,11 +5,15 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.areasdk.R;
 import com.example.areasdk.constant.Constants;
 import com.example.areasdk.databinding.ActivityAreaBinding;
 import com.example.areasdk.viewmodel.AreaViewModel;
+import com.google.android.material.snackbar.Snackbar;
+
+import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG;
 
 public class AreaActivity extends AppCompatActivity {
     @Override
@@ -17,8 +21,9 @@ public class AreaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityAreaBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_area);
         Intent intent = getIntent();
-        String value1 = intent.getStringExtra("Key_1");
-        String value2 = intent.getStringExtra("Key_2");
-        binding.setAreaViewModel(new AreaViewModel(this, value1, value2));
+        String area = intent.getStringExtra("area");
+        Toast.makeText(this, "Xác nhận địa chỉ:\n" + area, Toast.LENGTH_SHORT).show();
+        binding.edtArea.setText(area);
+        binding.setViewModel(new AreaViewModel(this, Constants.AreaType.CITY, ""));
     }
 }

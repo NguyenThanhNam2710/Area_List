@@ -68,6 +68,12 @@ public class AreaViewModel extends BaseObservable {
         notifyPropertyChanged(BR.areaList);
     }
 
+    public void onClicked() {
+        setAfterTextChanged("");
+        ListAreaAdapter adapter = new ListAreaAdapter(mContext, areaList);
+        setListAreaAdapter(adapter);
+    }
+
     public void afterTextChanged(CharSequence s) {
         if (s.length() == 0) {
             setAfterTextChanged("");
