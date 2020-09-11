@@ -1,0 +1,3 @@
+include ':AreaSDK'
+include ':app'
+rootProject.name = "Area_List"
