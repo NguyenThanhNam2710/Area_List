@@ -22,10 +22,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:hint="area" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvArea"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:setAdapter="@{areaViewModel.listAreaAdapter}" />
         </LinearLayout>
     </ScrollView>

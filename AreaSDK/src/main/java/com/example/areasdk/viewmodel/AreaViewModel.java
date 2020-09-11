@@ -32,14 +32,59 @@ import static com.example.areasdk.util.AreaUtils.convertObjectToBase64;
 
 public class AreaViewModel extends BaseObservable {
     private Context mContext;
+    private String areaType;
+    private String parentCode;
     @Bindable
     private ListAreaAdapter listAreaAdapter;
 
+    @Bindable
+    private String afterTextChanged = "";
+    @Bindable
+    private ArrayList<AreaResponse.ListArea> areaList;
+
     public AreaViewModel(Context mContext, String areaType, String parentCode) {
         this.mContext = mContext;
+        this.areaType = areaType;
+        this.parentCode = parentCode;
         setUpData(areaType, parentCode);
     }
 
+    public String getAfterTextChanged() {
+        return afterTextChanged;
+    }
+
+    public ArrayList<AreaResponse.ListArea> getAreaList() {
+        return areaList;
+    }
+
+    private void setAfterTextChanged(String afterTextChanged) {
+        this.afterTextChanged = afterTextChanged;
+        notifyPropertyChanged(BR.afterTextChanged);
+    }
+
+
+    private void setAreaList(ArrayList<AreaResponse.ListArea> areaList) {
+        this.areaList = areaList;
+        notifyPropertyChanged(BR.areaList);
+    }
+
+    public void afterTextChanged(CharSequence s) {
+        if (s.length() == 0) {
+            setAfterTextChanged("");
+            ListAreaAdapter adapter = new ListAreaAdapter(mContext, areaList);
+            setListAreaAdapter(adapter);
+        } else {
+            setAfterTextChanged(String.valueOf(s));
+            ArrayList<AreaResponse.ListArea> areaSearchList = new ArrayList<>();
+            for (int i = 0; i < areaList.size(); i++) {
+                if (areaList.get(i).getAreaName().toLowerCase().contains(afterTextChanged.toLowerCase())) {
+                    areaSearchList.add(areaList.get(i));
+                }
+            }
+            ListAreaAdapter adapter = new ListAreaAdapter(mContext, areaSearchList);
+            setListAreaAdapter(adapter);
+        }
+    }
 
     private void setListAreaAdapter(ListAreaAdapter listAreaAdapter) {
         this.listAreaAdapter = listAreaAdapter;
@@ -66,13 +111,13 @@ public class AreaViewModel extends BaseObservable {
                     String text = new String(Base64.decode(response.body().getBody(), Base64.DEFAULT));
                     AreaResponse areaResponse = new Gson().fromJson(text, AreaResponse.class);
                     Log.e("areaResponse", areaResponse.getListArea().size() + "");
-                    ArrayList<AreaResponse.ListArea> areaList = new ArrayList<>();
+                    areaList = new ArrayList<>();
                     areaList.addAll(areaResponse.getListArea());
-
                     //sap xep phan tu
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         areaList.sort(Comparator.comparing(AreaResponse.ListArea::getFullName));
                     }
+                    setAreaList(areaList);
                     ListAreaAdapter adapter = new ListAreaAdapter(mContext, areaList);
                     setListAreaAdapter(adapter);
                 } catch (Exception e) {

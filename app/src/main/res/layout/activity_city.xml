@@ -21,10 +21,20 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:afterTextChanged="@{(editable)->viewModel.afterTextChanged(editable)}"
+                android:drawableLeft="@drawable/ic_baseline_location"
+                android:drawablePadding="16dp"
+                android:hint="@string/app_area"
+                android:maxLines="1" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvArea"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:setAdapter="@{viewModel.listAreaAdapter}" />
         </LinearLayout>
     </ScrollView>
